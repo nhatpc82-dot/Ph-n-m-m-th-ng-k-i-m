@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        // Protect window.fetch assignment from browser extensions (e.g. Urban VPN requests.js)
+        try {
+          var originalFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _fetch = originalFetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _fetch;
+            },
+            set: function(val) {
+              _fetch = val;
+            }
+          });
+        } catch (e) {
+          try {
+            if (typeof Window !== 'undefined' && Window.prototype) {
+              var protoFetch = Window.prototype.fetch;
+              var _protoFetch = protoFetch;
+              Object.defineProperty(Window.prototype, 'fetch', {
+                configurable: true,
+                enumerable: true,
+                get: function() { return _protoFetch; },
+                set: function(val) { _protoFetch = val; }
+              });
+            }
+          } catch (_) {}
+        }
+
+        // Suppress unhandled errors originating from browser extensions
+        window.addEventListener('error', function(event) {
+          var file = event.filename || '';
+          var msg = event.message || '';
+          if (
+            file.indexOf('chrome-extension://') !== -1 ||
+            file.indexOf('moz-extension://') !== -1 ||
+            msg.indexOf('Cannot set property fetch of #<Window>') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function(event) {
+          var reasonStr = (event.reason && (event.reason.message || event.reason.stack || '')) || '';
+          if (
+            reasonStr.indexOf('chrome-extension://') !== -1 ||
+            reasonStr.indexOf('Cannot set property fetch of #<Window>') !== -1
+          ) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+          }
+        }, true);
+      })();
+    </script>
+    <title>EduStat Pro - Hệ Thống Thống Kê & Phân Tích Điểm Số Học Sinh</title>
+    <meta name="description" content="Phần mềm thống kê kết quả học tập và thi cử theo nhiều tiêu chuẩn từ file Excel, tự động xếp thứ hạng, phân bổ dải điểm và xuất báo cáo tách sheet theo từng lớp." />
+    <meta property="og:title" content="EduStat Pro - Thống Kê Điểm Học Sinh Từ Excel" />
+    <meta property="og:description" content="Thống kê kết quả thi cử theo trường, lớp, môn, xếp thứ tự động và xuất báo cáo chuẩn." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/jpeg" href="/assets/app_logo_nhat.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased font-sans selection:bg-indigo-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

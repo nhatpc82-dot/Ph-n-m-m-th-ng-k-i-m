@@ -1,0 +1,6 @@
+{
+  "name": "EduStat Pro - Hệ Thống Thống Kê & Phân Tích Điểm Số Học Sinh",
+  "description": "Phần mềm thống kê kết quả học tập và thi cử theo nhiều tiêu chuẩn từ file Excel, tự động xếp thứ hạng, phân bổ dải điểm và xuất báo cáo tách sheet theo từng lớp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
